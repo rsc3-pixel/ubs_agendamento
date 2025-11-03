@@ -13,14 +13,22 @@ Para inicializar o banco de dados localmente, siga estes passos:
 
 ### 2. Configuração do Python
 
-1. Instale as dependências: `pip install mysql-connector-python Flask`
-2. Configure as credenciais no arquivo `db_connector.py`.
+1. **Instale as dependências:** `pip install mysql-connector-python python-dotenv`
+2. **Configure as variáveis de ambiente:** Crie um arquivo chamado `.env` na raiz do projeto e adicione suas credenciais do banco de dados, como no exemplo abaixo. Isso evita que informações sensíveis fiquem expostas no código.
+   ```
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=sua_senha_aqui
+   DB_DATABASE=ubs_agendamento
+   ```
+3. **Execute a aplicação:** `python app.py`
 
 ## Estrutura do Projeto
 
 O projeto está dividido em arquivos com responsabilidades bem definidas para facilitar a manutenção e o entendimento do código:
 
 -   `README.md`: Este arquivo, com a documentação do projeto.
+-   `database_schema.sql`: Script de inicialização do banco de dados.
 -   `db_connector.py`: Gerencia os detalhes e as funções de conexão com o banco de dados.
 -   `data_manager.py`: Contém toda a lógica para interagir com o banco de dados (operações CRUD). É a camada de acesso a dados.
 -   `app.py`: Responsável pela interface do usuário (o menu de console) e pela coleta de dados. É a camada de apresentação.
@@ -30,22 +38,27 @@ O projeto está dividido em arquivos com responsabilidades bem definidas para fa
 
 ## 1. Conector do Banco de Dados (`db_connector.py`)
 
-Este script isola a configuração e a lógica de conexão com o banco de dados MySQL. Isso torna o sistema mais seguro e fácil de manter, pois as credenciais do banco de dados estão em um único lugar.
+Este script isola a configuração e a lógica de conexão com o banco de dados MySQL. Para maior segurança, ele foi adaptado para ler as credenciais de um arquivo `.env`, evitando que dados sensíveis sejam expostos diretamente no código.
 
 ### Código (`db_connector.py`)
 
 ```python
 # 2. Conexão MySQL
-
 import mysql.connector
 from mysql.connector import Error
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
 
 # --- Configurações do Banco de Dados ---
+# As credenciais são lidas das variáveis de ambiente
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root', 
-    'password': '418131909', 
-    'database': 'ubs_agendamento' 
+    'host': os.getenv('DB_HOST'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'database': os.getenv('DB_DATABASE')
 }
 
 def conectar_bd():
