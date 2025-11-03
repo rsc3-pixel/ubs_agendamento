@@ -1,4 +1,4 @@
-# Sistema de Agendamento da UBS
+# Sistema de Agendamento da UBS.
 
 Este é um sistema simples de console (linha de comando) para gerenciar o cadastro de pacientes em uma Unidade Básica de Saúde (UBS). Ele permite criar, listar, modificar e excluir registros de pacientes, interagindo com um banco de dados MySQL.
 
